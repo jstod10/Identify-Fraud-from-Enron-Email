@@ -16,6 +16,11 @@ http://www.cs.cmu.edu/~./enron/
 https://en.wikipedia.org/wiki/Hyperparameter_optimization#:~:text=In%20machine%20learning%2C%20hyperparameter%20optimization,typically%20node%20weights)%20are%20learned.
 https://scikit-learn.org/stable/modules/classes.html#module-sklearn.model_selection
 https://github.com/jupyterhub/jupyterhub/issues/1572
-
-
+https://scikit-learn.org/stable/auto_examples/preprocessing/plot_scaling_importance.html
+https://developers.google.com/machine-learning/crash-course/classification/precision-and-recall
+https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-python.html
+https://stackoverflow.com/questions/49428381/how-to-change-jupyter-kernel-from-python-2-to-python-3#:~:text=Then%20open%20jupyter%20notebook%2C%20you%20will%20find%20python%20on%20your%20kernel.&text=You%20can%20do%20this%20with,need%20run%2C%20source%20activate%20py36
+https://github.com/udacity/ud120-projects/pull/71
+https://github.com/trsvchn/ud120-projects-py3-jupyter
+https://github.com/udacity/ud120-projects/issues/191
 
