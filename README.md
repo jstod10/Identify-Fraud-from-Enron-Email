@@ -1,69 +1,67 @@
-# Identify-Fraud-from-Enron-Email
+### Project Goal
 
-Project Overview
-In this project, you will play detective, and put your machine learning skills to use by building an algorithm to identify Enron Employees who may have committed fraud based on the public Enron financial and email dataset.
+The goal of this project was to examine data related to executives working at the infamous company Enron.  The dataset contains information on 146 individuals, with each record containing 21 features.  The purpose of the project was to utilize machine learning to determine which set of features could most effectively predict attributes a Person of Interest (POI) might display. 18 POIs have previously been identified
 
-Prepare for this project with: Intro to Machine Learning.
+Initial examination of the dataset revealed two troublesome records:
 
-Note
-If you have successfully completed the project for the Intro to Machine Learning course in the past (which entails having graduated from the course and having access to your course certificate), simply email us at dataanalyst-project@udacity.com with your passing evaluation and we'll give you credit for this project.
+* "The Travel Agency in the Park"
+* "Total"
 
-Why this Project?
-This project will teach you the end-to-end process of investigating data through a machine learning lens.
+I removed those using the .pop() method, then created a for loop to iterate through the remaining entries to check for records with similar concerns and/or little to no data.  I ended up removing two more individual records.  The final dataset contained 142 entries. 
 
-It will teach you how to extract and identify useful features that best represent your data, a few of the most commonly used machine learning algorithms today, and how to evaluate the performance of your machine learning algorithms.
+### Features Used
 
-What will I learn?
-By the end of the project, you will be able to:
+The feature list I ended up sing included the following:
 
-Deal with an imperfect, real-world dataset
-Validate a machine learning result using test data
-Evaluate a machine learning result using quantitative metrics
-Create, select and transform features
-Compare the performance of machine learning algorithms
-Tune machine learning algorithms for maximum performance
-Communicate your machine learning algorithm results clearly
-Why is this Important to my Career?
-Machine learning is a first-class ticket to the most exciting careers in data analysis today. As data sources proliferate along with the computing power to process them, going straight to the data is one of the most straightforward ways to quickly gain insights and make predictions.
+('poi', 'exercised_stock_options', 'total_stock_value', 'bonus', 
+'salary', 'deferred_income','long_term_incentive',
+'restricted_stock','total_payments',
+'shared_receipt_with_poi', 'loan_advances')
 
-In this project, you're working with a real dataset that, by itself, had existed almost stagnantly for years. However, through using machine learning and data science, the insights drawn from this data had a huge impact on a corporation and the economy.
+#### Selection Process
 
-;
+I started by removing the 'email_address' and 'other' features, as the information contained in those was irrelevant and/or undefined.  I tried to create a new feature 'loan_advances_feature' that combined the 'loan_advances' and 'from_this_person_to_poi' features.  However, that feature proved no benefit so I ended up not using it in my final feature set. 
 
-How do I Complete this Project?
-This project is connected to the Intro to Machine Learning course, but depending on your background knowledge of machine learning, you may not need to take the whole thing to complete this project.
+I used DecisionTreeClassifier first to evaluate different sets of features.  The feature list with the 2 features removed (as outlined above) proved to be the most accurate, although not quite to my liking.  I then utilized Several scaling options (Standard, MinMax, MaxAbs, PowerTranformer, and QuantileTransformer (Gaussian and Uniform)) along with Select K Best to isolate the most important features fromt the dataset.  I utilized the results from that query to use the top five features using a feature score of 10.0+ as criteria.  
 
-A note before you begin: the mini-projects in the Intro to Machine Learning class were mostly designed to have lots of data points, give intuitive results, and otherwise behave nicely. This project is significantly tougher in that we're now using the real data, which can be messy and does not have as many data points as we usually hope for when doing machine learning. Don't get discouraged--imperfect data is something you need to be used to as a data analyst! If you encounter something you haven't seen before, take a step back and think about a smart way around. You can do it!
+Next, I used DecisionTreeClassifier to test feature sets using the top 4, 5, and 6 top features, along with my newly created feature to see which perfomed the best.  I wasn't happy with the results right away, so I ended up settling on using the top 10 features in my final query. 
 
-Project Overview
-In 2000, Enron was one of the largest companies in the United States. By 2002, it had collapsed into bankruptcy due to widespread corporate fraud. In the resulting Federal investigation, a significant amount of typically confidential information entered into the public record, including tens of thousands of emails and detailed financial data for top executives. In this project, you will play detective, and put your new skills to use by building a person of interest identifier based on financial and email data made public as a result of the Enron scandal. To assist you in your detective work, we've combined this data with a hand-generated list of persons of interest in the fraud case, which means individuals who were indicted, reached a settlement or plea deal with the government, or testified in exchange for prosecution immunity.
+### Algorithms
 
-Resources Needed
-You should have Python 2.7 and sklearn running on your computer, as well as the starter code (both Python scripts and the Enron dataset) that you downloaded as part of the first mini-project in the Intro to Machine Learning course. You can get the starter code, which uses Python 2.7, on git: git clone https://github.com/udacity/ud120-projects.git
+I applied the following algorithms during testing:
 
-The starter code can be found in the final_project directory of the codebase that you downloaded for use with the mini-projects. Some relevant files:
+* SVC
+* DecisionTreeClassifier
+* RandomForest
+* AdaBoost
+* GradientBoosting
 
-poi_id.py : Starter code for the POI identifier, you will write your analysis here. You will also submit a version of this file for your evaluator to verify your algorithm and results.
+Several test runs revealed DecisionTree as the top performer of the group, with GradientBoosting and SVC coming in next.  DecisionTree consistently returned accuracy of 90%+ on training sets and 85%+ on test sets.  Precision and Recall both consisently came in at roughly 0.429 and 0.5, respectively.
 
-final_project_dataset.pkl : The dataset for the project, more details below.
+AdaBoost did not show up in my top 5 performers during all testing.
 
-tester.py : When you turn in your analysis for evaluation by Udacity, you will submit the algorithm, dataset and list of features that you use (these are created automatically in poi_id.py). The evaluator will then use this code to test your result, to make sure we see performance that’s similar to what you report. You don’t need to do anything with this code, but we provide it for transparency and for your reference.
+### Tuning
 
-emails_by_address : this directory contains many text files, each of which contains all the messages to or from a particular email address. It is for your reference, if you want to create more advanced features based on the details of the emails dataset. You do not need to process the e-mail corpus in order to complete the project.
+The definition of tuning, according to [https://en.wikipedia.org/wiki/Hyperparameter_optimization#:~:text=In%20machine%20learning%2C%20hyperparameter%20optimization,typically%20node%20weights)%20are%20learned.]:
 
-Steps to Success
-We will provide you with starter code that reads in the data, takes your features of choice, then puts them into a NumPy array, which is the input form that most sklearn functions assume. Your job is to engineer the features, pick and tune an algorithm, and to test and evaluate your identifier. Several of the mini-projects were designed with this final project in mind, so be on the lookout for ways to use the work you’ve already done.
+In machine learning, hyperparameter optimization or tuning is the problem of choosing a set of optimal hyperparameters for a learning algorithm. A hyperparameter is a parameter whose value is used to control the learning process. By contrast, the values of other parameters (typically node weights) are learned.
 
-As preprocessing to this project, we've combined the Enron email and financial data into a dictionary, where each key-value pair in the dictionary corresponds to one person. The dictionary key is the person's name, and the value is another dictionary, which contains the names of all the features and their values for that person. The features in the data fall into three major types, namely financial features, email features and POI labels.
+The same kind of machine learning model can require different constraints, weights or learning rates to generalize different data patterns. These measures are called hyperparameters, and have to be tuned so that the model can optimally solve the machine learning problem. Hyperparameter optimization finds a tuple of hyperparameters that yields an optimal model which minimizes a predefined loss function on given independent data. The objective function
+takes a tuple of hyperparameters and returns the associated loss.  Cross-validation is often used to estimate this generalization performance.
 
-financial features: ['salary', 'deferral_payments', 'total_payments', 'loan_advances', 'bonus', 'restricted_stock_deferred', 'deferred_income', 'total_stock_value', 'expenses', 'exercised_stock_options', 'other', 'long_term_incentive', 'restricted_stock', 'director_fees'] (all units are in US dollars)
 
-email features: ['to_messages', 'email_address', 'from_poi_to_this_person', 'from_messages', 'from_this_person_to_poi', 'shared_receipt_with_poi'] (units are generally number of emails messages; notable exception is ‘email_address’, which is a text string)
+When tuning is not done well, it leads to ineffecient, inconsistent, and irrelevant results.  To validate my findings, I created a for loop to test different combination of classifiers with recommended parameters for each, then looped through scale features to look for the top 5 performing parameters. 
 
-POI label: [‘poi’] (boolean, represented as integer)
+### Validation
 
-You are encouraged to make, transform or rescale new features from the starter features. If you do this, you should store the new feature to my_dataset, and if you use the new feature in the final algorithm, you should also add the feature name to my_feature_list, so your evaluator can access it during testing. For a concrete example of a new feature that you could add to the dataset, refer to the lesson on Feature Selection.
+A validation dataset is a sample of data held back from training your model that is used to give an estimate of model skill while tuning model’s hyperparameters.
 
-In addition, we advise that you keep notes as you work through the project. As part of your project submission, you will compose answers to a series of questions (also given on the next page) to understand your approach towards different aspects of the analysis. Your thought process is, in many ways, more important than your final project and we will by trying to probe your thought process in these questions.
+When validation is done wrong, it can lead to innacurate findings.  It's important to find desirable symmetry between training and test sets. 
 
-;
+To validate my findings, I created a for loop to test different combinations of classifiers and scaling to isolate the best performers.  I then ran several test runs and took note of the top 5 results and looked for consistency. 
+
+### Testing
+
+Testing revealed accuracy in the range of 85%. 
+
+Precision and Recall came in at 0.429 and 0.5, respectively.  
