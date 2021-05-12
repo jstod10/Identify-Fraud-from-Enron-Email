@@ -72,7 +72,9 @@ Performance tests using DecisionTree and my selected feature set were as follows
 
 ### Tuning
 
-The definition of tuning, according to wikipedia: [https://en.wikipedia.org/wiki/Hyperparameter_optimization#:~:text=In%20machine%20learning%2C%20hyperparameter%20optimization,typically%20node%20weights)%20are%20learned.]:
+The definition of tuning, according to wikipedia:
+
+[https://en.wikipedia.org/wiki/Hyperparameter_optimization#:~:text=In%20machine%20learning%2C%20hyperparameter%20optimization,typically%20node%20weights)%20are%20learned.]:
 
 In machine learning, hyperparameter optimization or tuning is the problem of choosing a set of optimal hyperparameters for a learning algorithm. A hyperparameter is a parameter whose value is used to control the learning process. By contrast, the values of other parameters (typically node weights) are learned.
 
@@ -82,8 +84,43 @@ takes a tuple of hyperparameters and returns the associated loss.  Cross-validat
 
 When tuning is not done well, it leads to ineffecient, inconsistent, and irrelevant results.  
 
-To tune the parameters, I created a for loop, incorporating GridSearchCV for parameter tuning to test different combination of classifiers with recommended parameters for each. 
+To tune the parameters, I created a for loop, incorporating GridSearchCV for parameter tuning to test different combination of classifiers with recommended parameters for each.  The following is a list of classifiers used, along with the tuned parameter settings for each:
 
+* GaussianNB - default
+
+
+* SVC - {'kernel': ['poly', 'rbf', 'sigmoid'],
+                             'cache_size': [7000],
+                             'tol': [0.0001, 0.001, 0.005, 0.05],
+                             'decision_function_shape': ['ovo', 'ovr'],
+                             'random_state': [randomState],
+                             'verbose' : [False],
+                             'C': [100, 1000, 10000]})
+                             
+* Decision Tree - {'criterion': ['gini', 'entropy'], 
+                    'splitter': ['best', 'random'],                         
+                    'min_samples_split': [2, 10, 20],
+                    'max_depth': [None, 2, 4, 8, 16],
+                    'min_samples_leaf': [1, 3, 5, 7, 9],
+                    'max_leaf_nodes': [None, 6, 12, 24],
+                    'random_state': [randomState]})
+                    
+* AdaBoost - {'n_estimators': [25, 50, 100],
+              'algorithm': ['SAMME', 'SAMME.R'],
+              'learning_rate': [.2, .5, 1, 1.4, 2.],
+              'random_state': [randomState]})
+              
+
+* Logistic Regression - {'penalty': ['l1', 'l2'],
+                          'tol': [0.0001, 0.0005, 0.001, 0.005],
+                          'C': [1, 10, 100, 1000, 10000, 100000, 1000000],
+                          'fit_intercept': [True, False],
+                          'solver': ['liblinear'],
+                          'class_weight': [None, 'balanced'],
+                          'verbose': [False],
+                          'random_state': [randomState]})
+                            
+ 
 
 ### Validation
 
@@ -91,9 +128,10 @@ A validation dataset is a sample of data held back from training your model that
 
 When validation is done wrong, it can lead to innacurate findings.  A classic mistake in validation is when we use the same data for both training and testing.  It is important to train on a valid sample and then test on a different set of data to test the efficacy of chosen parameters.  It's important to find desirable symmetry between training and test sets, especially in regards to accuracy - the closer the two results, the more effective the chosen method. 
 
-To validate my findings initially, I created a for loop to test different combinations of classifiers and scaling to isolate the best performers using cross validation.  I then ran several test runs and took note of the top 5 results and looked for consistency.
+An important step in the validation process was to use feature scaling in an attempt to standardize the features, normalizing the data into a set range of minimum and maximum values using the MinMaxScaler.  This estimator scales and translates each feature individually into the given range on the training set.   
+I created a for loop to test different combinations of classifiers and the scaling method outlined above to isolate the best performers using cross validation.  I then ran several test runs and took note of the top 5 results and looked for consistency.
 
-Final validation was performed by splitting the data into training and testing sets and comparing the results of each.  This code was detailed in the tester.py script.
+Final validation was performed using the code detailed in the tester.py script,  which utilizes the Stratified Shuffle Split validation.  During this cross-validation process, the data is split into randomized training and testing.  Performance is then measured and compared between the two groups.  Symmetry between groups proves the effectiveness of the model.  
 
 ### Testing
 
@@ -116,6 +154,4 @@ Testing using the testing.py script revealed:
 * Precision and Recall came in at 0.30560 and 0.31400, respectively.
 
 These results are encouraging, as there is a nice balance between precision and recall, which proves the effectiveness of the model. 
-
-
 
