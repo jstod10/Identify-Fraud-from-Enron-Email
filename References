@@ -23,4 +23,7 @@ https://stackoverflow.com/questions/49428381/how-to-change-jupyter-kernel-from-p
 https://github.com/udacity/ud120-projects/pull/71
 https://github.com/trsvchn/ud120-projects-py3-jupyter
 https://github.com/udacity/ud120-projects/issues/191
-
+https://scikit-learn.org/stable/auto_examples/preprocessing/plot_scaling_importance.html
+https://scikit-learn.org/stable/modules/grid_search.html
+https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedShuffleSplit.html
+https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MinMaxScaler.html
